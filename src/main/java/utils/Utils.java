@@ -30,17 +30,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("JavaDoc")
-public class UtilsPageObject extends SetupWebdriver {
+public class Utils extends SetupWebdriver {
 
     /**
      * @author Sergio Caballero
      */
 
-    protected static final Logger LOGGER = Logger.getLogger(UtilsPageObject.class.getName());
+    protected static final Logger LOGGER = Logger.getLogger(Utils.class.getName());
     private final String testCaseName;
     private SetupWebdriver setupWebdriver;
 
-    public UtilsPageObject() {
+    public Utils() {
         testCaseName = getTestCaseName();
 
     }
