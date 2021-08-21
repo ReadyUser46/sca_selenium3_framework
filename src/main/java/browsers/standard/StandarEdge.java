@@ -20,7 +20,7 @@ public class StandarEdge extends BrowserCapability implements Browser {
 
     @Override
     public WebDriver getLocalDriver() {
-        System.setProperty("webdriver.edge.driver", "C:\\utils\\selenium\\Drivers\\msedgedriver.exe");
+        System.setProperty("webdriver.edge.driver", "C:\\Selenium\\drivers\\msedgedriver.exe");
         return new EdgeDriver();
     }
 }

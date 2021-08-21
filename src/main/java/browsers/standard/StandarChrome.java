@@ -19,7 +19,7 @@ public class StandarChrome extends BrowserCapability implements Browser {
 
   @Override
   public WebDriver getLocalDriver() {
-    System.setProperty("webdriver.chrome.driver", "C:\\utils\\selenium\\Drivers\\chromedriver.exe");
+    System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\drivers\\chromedriver.exe");
     return new ChromeDriver();
   }
 }

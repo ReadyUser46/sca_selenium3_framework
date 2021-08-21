@@ -6,7 +6,6 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
-import setup.customWebDriver;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Calendar;
-import java.util.logging.Level;
 
 public class Screenshots {
 
@@ -30,12 +28,12 @@ public class Screenshots {
      */
     @Attachment(value = "Screenshot jpg attachment", type = "image/jpg")
     @Step("Taking a screenshot from Assert")
-    public static byte[] takeRemoteScreenshot(customWebDriver driver) throws URISyntaxException, IOException {
+    public static byte[] takeRemoteScreenshot(WebDriver driver) throws URISyntaxException, IOException {
         try {
             String filename = generateRandomFilename("ForceFail");
-            WebDriver augmentedDriver = new Augmenter().augment(driver.getcustomWebdriver());
+            WebDriver augmentedDriver = new Augmenter().augment(driver);
             File screenshot = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE);
-            FileUtils.copyFile(screenshot, new File(SCREENSHOTS_DIR + SLASH + "2" + filename));
+            //FileUtils.copyFile(screenshot, new File(SCREENSHOTS_DIR + SLASH + "2" + filename));
             return Files.readAllBytes(Paths.get(screenshot.toURI()));
         } catch (IOException e) {
 
@@ -72,18 +70,18 @@ public class Screenshots {
 
 
     // SCREENSHOTS
-    @Attachment(value = "Screenshot jpg attachment", type = "image/jpg")
+/*    @Attachment(value = "Screenshot jpg attachment", type = "image/jpg")
     @Step("Taking a screenshot from PageObject")
     public byte[] makeScreenshot() {
         try {
             String filename = generateRandomFilename("ForceFail");
             WebDriver augmentedDriver = new Augmenter().augment(driver.getcustomSeleniumWebdriver());
             File screenshot = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE);
-            FileUtils.copyFile(screenshot, new File(reportsDir + SLASH + "2" + filename));
+            //FileUtils.copyFile(screenshot, new File(reportsDir + SLASH + "2" + filename));
             return Files.readAllBytes(Paths.get(screenshot.toURI()));
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, String.format("Error taking screenshot for: '%s'", testCaseName));
+            //LOGGER.log(Level.SEVERE, String.format("Error taking screenshot for: '%s'", testCaseName));
         }
         return null;
-    }
+    }*/
 }

@@ -20,7 +20,7 @@ public class StandarFirefox extends BrowserCapability implements Browser {
 
   @Override
   public WebDriver getLocalDriver() {
-    System.setProperty("webdriver.gecko.driver", "C:\\utils\\selenium\\Drivers\\geckodriver.exe");
+    System.setProperty("webdriver.gecko.driver", "C:\\Selenium\\drivers\\geckodriver.exe");
     return new FirefoxDriver();
   }
 }

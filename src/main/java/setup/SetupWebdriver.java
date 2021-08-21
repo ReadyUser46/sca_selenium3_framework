@@ -15,14 +15,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ScriptBaseTest {
+public class SetupWebdriver {
 
     private static final String REMOTE_WEBDRIVER_URL = "http://localhost:4444/wd/hub";
     private static final int pageTimeout = 300000; // The Timeout in miliseconds when a load page expectation is called
     private static final int implicitTimeout = 20000; // The Timeout in miliseconds when an implicit expectation is called
     private static final int scriptTimeout = 600000; // The script Timeout in miliseconds when a load script expectation is called
-    protected String testCaseName;
     protected WebDriver driver;
+    private String testCaseName;
     private String browserName = null;
     private String targetUrl = null;
     private Logger logger;
@@ -35,38 +35,28 @@ public class ScriptBaseTest {
         this.testCaseName = testCaseName;
     }
 
-
-    public String getBrowserName() {
-        return browserName;
-    }
-
     public void setBrowserName(String browserName) {
         this.browserName = browserName;
-    }
-
-    public String getTargetUrl() {
-        return targetUrl;
     }
 
     public void setTargetUrl(String targetUrl) {
         this.targetUrl = targetUrl;
     }
 
-    protected void setLogger(Logger logger) {
+    public void setLogger(Logger logger) {
         this.logger = logger;
     }
 
-    protected Logger customLog() {
+    public Logger customLog() {
         return logger;
     }
 
+    public void skipTest(String reason) {
+        throw new SkipException(reason);
+    }
 
-    /**
-     * Before Method to create webdriver
-     */
     @BeforeMethod(alwaysRun = true)
     public void setup() {
-        setLogger(Logger.getLogger("setup"));
 
         HashMap<String, Browser> selectBrower = new HashMap<>();
         selectBrower.put("chrome", new StandarChrome());
@@ -80,7 +70,9 @@ public class ScriptBaseTest {
         driver.manage().timeouts().implicitlyWait(implicitTimeout, TimeUnit.MILLISECONDS);
         driver.manage().timeouts().pageLoadTimeout(pageTimeout, TimeUnit.MILLISECONDS);
         driver.manage().timeouts().setScriptTimeout(scriptTimeout, TimeUnit.MILLISECONDS);
+
         /*Logger*/
+        setLogger(Logger.getLogger("setup"));
         customLog().info(String.format("\n[INIT] Test case = '%s' will be executed\n" +
                         "[INIT] Browser = '%s' | Target url = %s\n" +
                         "[INIT] Webdriver initialized",
@@ -92,11 +84,8 @@ public class ScriptBaseTest {
 
     }
 
-    /**
-     * After Method to close webdriver
-     */
     @AfterMethod(alwaysRun = true)
-    public void releaseDriver() {
+    public void tearDown() {
         try {
             //todo takeRemoteScreenshot(customWebDriver(), customWebDriver().getCurrentUrl());
             driver.quit();
@@ -104,15 +93,6 @@ public class ScriptBaseTest {
         } catch (Exception e) {
             customLog().log(Level.SEVERE, String.format("Error closing Webdriver for: '%s'", testCaseName));
         }
-    }
-
-    /**
-     * Method to skip a test
-     *
-     * @param reason reason why you need to skip the test
-     */
-    protected void skipTest(String reason) {
-        throw new SkipException(reason);
     }
 
 

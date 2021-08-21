@@ -3,6 +3,7 @@ package utils;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import io.qameta.allure.Step;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -15,7 +16,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import setup.ScriptBaseTest;
+import setup.SetupWebdriver;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -29,28 +30,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("JavaDoc")
-public class UtilsPageObject extends ScriptBaseTest {
+public class UtilsPageObject extends SetupWebdriver {
 
     /**
-     * @author ivan.delviso
-     * <p>
-     * Refactored by
      * @author Sergio Caballero
      */
 
-    public static final int NUM_INTENTOS = 5;
-    public static final int WAIT_60_SEG = 60;
-    public static final long timeOutInSeconds = 15L;
-    public static final String POPUP_XPATH = "//a[contains(text(), '[X]')]";
-    protected static final int implicitWait = 30;
-    protected static final int pageLoadTimeout = 60;
     protected static final Logger LOGGER = Logger.getLogger(UtilsPageObject.class.getName());
-    private static final String SLASH = File.separator;
-    private static final String FRAME_APPAREA_ID = "wAppArea";
-    private static final String FRAME_DIALOGMODAL_ID = "dialog-modal-content";
-    private ScriptBaseTest scriptBaseTest;
+    private final String testCaseName;
+    private SetupWebdriver setupWebdriver;
 
     public UtilsPageObject() {
+        testCaseName = getTestCaseName();
+
     }
 
     protected static String createFile(String fileName, long sizeMb, String linuxPath) {
@@ -668,6 +660,25 @@ public class UtilsPageObject extends ScriptBaseTest {
         String sourceURL = (String) jsExecutor.executeScript("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').href");
 
         return new String[]{fileName, sourceURL};
+    }
+
+    @Step("{1}}")
+    public void assertTrue(Boolean bol, String checkMessage) throws URISyntaxException, IOException, AssertionError {
+        try {
+            Assert.assertTrue(bol, checkMessage);
+        } catch (AssertionError e) {
+            throw new AssertionError(e.getMessage());
+        }
+    }
+
+    @Step("{3}}")
+    public void assertEquals(String condition1, String condition2, String assertMessage) throws URISyntaxException, IOException, AssertionError {
+        try {
+            Assert.assertEquals(condition1, condition2, null);
+            // return true;
+        } catch (AssertionError | Exception e) {
+            throw new AssertionError(e.getMessage());
+        }
     }
 
 }
