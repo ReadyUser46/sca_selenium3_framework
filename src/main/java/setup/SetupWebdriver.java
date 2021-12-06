@@ -1,7 +1,7 @@
 package setup;
 
 
-import browsers.standard.Browser;
+import browsers.Browsers;
 import browsers.standard.StandarChrome;
 import browsers.standard.StandarEdge;
 import browsers.standard.StandarFirefox;
@@ -58,12 +58,12 @@ public class SetupWebdriver {
     @BeforeMethod(alwaysRun = true)
     public void setup() {
 
-        HashMap<String, Browser> selectBrower = new HashMap<>();
+        HashMap<String, Browsers> selectBrower = new HashMap<>();
         selectBrower.put("chrome", new StandarChrome());
         selectBrower.put("firefox", new StandarFirefox());
         selectBrower.put("edge", new StandarEdge());
 
-        Browser browser = selectBrower.get(browserName);
+        Browsers browser = selectBrower.get(browserName);
         driver = browser.getLocalDriver();
 
         /*manage timeouts*/

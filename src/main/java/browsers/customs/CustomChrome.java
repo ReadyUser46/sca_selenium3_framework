@@ -1,14 +1,15 @@
 package browsers.customs;
 
-import browsers.BrowserCapability;
+import browsers.Browsers;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
 
 import java.util.HashMap;
 
-public class CustomChrome extends BrowserCapability {
+public class CustomChrome extends Browsers {
   private static final ChromeOptions chromeOptions = new ChromeOptions();
   Proxy proxy = new Proxy();
 
@@ -52,5 +53,15 @@ public class CustomChrome extends BrowserCapability {
       chromeOptions.addExtensions(new File("src/test/resources/Proxy_Auto_Auth_2.0.0.0.crx"));
     }*/
 
+  }
+
+  @Override
+  public WebDriver getLocalDriver() {
+    return null;
+  }
+
+  @Override
+  public String getBrowserName() {
+    return null;
   }
 }

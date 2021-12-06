@@ -9,9 +9,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.*;
-import org.openqa.selenium.remote.LocalFileDetector;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -21,10 +18,7 @@ import setup.SetupWebdriver;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,111 +36,6 @@ public class Utils extends SetupWebdriver {
 
     public Utils() {
         testCaseName = getTestCaseName();
-
-    }
-
-    protected static String createFile(String fileName, long sizeMb, String linuxPath) {
-
-        // Define folder path
-        String folderPath;
-        if (System.getProperty("os.name").contains("Windows")) {
-            folderPath = System.getProperty("user.dir") + "\\src\\test\\resources\\createdFiles\\";
-        } else {
-            folderPath = linuxPath;
-        }
-
-        // Create file for a given path+name and set size
-        File file = new File(folderPath + fileName);
-        if (!file.exists()) {
-            if (file.getParentFile().mkdirs()) LOGGER.info("The file was created in: " + file);
-            else LOGGER.info("[ERROR] Error creating directory");
-            try (RandomAccessFile f = new RandomAccessFile(file, "rw")) {
-                f.setLength(1024 * sizeMb);
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Exception in createFile: ", e);
-            }
-        }
-        //return path in String format
-        return file.getPath();
-    }
-
-    //DATA GENERATOR --> SERGIO CABALLERO
-    public static String generadorMatriculaAleatoria(String pais) {
-        char[] array = new char[]{'B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z'};
-        String matricula = "";
-        switch (pais) {
-            case "ES":
-                for (int i = 0; i < 7; ++i) {
-                    Random rnd = new Random();
-                    int ale = (int) (rnd.nextDouble() * (double) array.length);
-                    int ale2 = (int) (rnd.nextDouble() * 10.0D);
-                    if (i > 3) {
-                        matricula = matricula + array[ale];
-                    } else {
-                        matricula = matricula + ale2;
-                    }
-                }
-                break;
-            case "BR":
-                for (int i = 0; i < 7; ++i) {
-                    Random rnd = new Random();
-                    int ale = (int) (rnd.nextDouble() * (double) array.length);
-                    int ale2 = (int) (rnd.nextDouble() * 10.0D);
-                    if (i > 2) {
-                        matricula = matricula + ale2;
-                    } else {
-                        matricula = matricula + array[ale];
-                    }
-                }
-                break;
-            case "PT":
-                for (int i = 0; i < 6; ++i) {
-                    Random rnd = new Random();
-                    int ale = (int) (rnd.nextDouble() * (double) array.length);
-                    int ale2 = (int) (rnd.nextDouble() * 10.0D);
-                    if (i <= 1 || i > 3) {
-                        matricula = matricula + ale2;
-                    } else {
-                        matricula = matricula + array[ale];
-                    }
-                    if (i == 1 || i == 3) {
-                        matricula = matricula + "-";
-                    }
-                }
-                break;
-            case "CO":
-                for (int i = 0; i < 6; ++i) {
-                    Random rnd = new Random();
-                    int ale = (int) (rnd.nextDouble() * (double) array.length);
-                    int ale2 = (int) (rnd.nextDouble() * 10.0D);
-                    if (i > 2) {
-                        matricula = matricula + ale2
-                        ;
-                    } else {
-                        matricula = matricula + array[ale];
-                    }
-                }
-                break;
-        }
-        return matricula;
-    }
-
-    public static String readProperty(String key) {
-        //this method read the user/pass located in /asf-oes/config.properties
-        //this method is only valid for the framework itself
-        String propertiesPath = System.getProperty("user.dir") + "/asf-oes/config.properties";
-
-        String value = null;
-
-        try {
-            PropertiesConfiguration config = new PropertiesConfiguration(propertiesPath);
-            value = config.getProperty(key).toString();
-
-        } catch (ConfigurationException e) {
-            LOGGER.log(Level.SEVERE, "Exception occur while reading user/pass values in", e);
-        }
-        return value;
-
     }
 
     /**
@@ -188,25 +77,6 @@ public class Utils extends SetupWebdriver {
     }
 
     //HARDCODE SLEEPS
-
-    public static void uploadLocalFile(WebDriver driver, WebElement inputFileElement, String filePath, boolean showElement) {
-
-        //javascript to show the element
-        if (showElement) {
-            JavascriptExecutor js = (JavascriptExecutor) driver;
-            js.executeScript("arguments[0].style.display = 'block';", inputFileElement);
-        }
-
-        //for headless browser
-        ((RemoteWebElement) inputFileElement).setFileDetector(new LocalFileDetector());
-
-        try {
-            inputFileElement.sendKeys(filePath);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Make sure the webElement passed is an input file type", e);
-        }
-    }
-
     protected void espera(int s) {
         try {
             Thread.sleep(1000 * s);
@@ -219,66 +89,19 @@ public class Utils extends SetupWebdriver {
         espera(1);
     }
 
-    protected void espera(WebElement element, int s) {
-        for (int i = 1; i < s; i++) {
-            try {
-                if (element.isEnabled()) {
-                    i = s;
-                } else {
-                    Thread.sleep(1000);
-                }
-            } catch (Exception ie) {
-                // do nothing
-            }
-        }
-    }
-
     // WINDOWS
-    public List<String> getWindowsNameList(int countWindows) {
-        List<String> windowsNameList = new ArrayList<>();
-        for (int x = 0; x < countWindows; x++) {
-            String text = driver.getWindowHandles().toArray()[x].toString();
-            windowsNameList.add(text);
-        }
-        return windowsNameList;
-    }
-
-    public String getWindowName() {
-        return driver.getWindowHandle();
-    }
-
-    public void changeToDesiredWindow(String name) {
+    public void switchToWindow(String name) {
         driver.switchTo().window(name);
     }
 
-    public void closeActualWindowAndChangeTo(String windowName) {
-        driver.close();
-        driver.switchTo().window(windowName);
-    }
-
-    public void changeToNextWindow() {
+    public void switchToNextWindow() {
         final int countWindows = driver.getWindowHandles().size();
-        String actualWindowName = getWindowName();
-        List<String> windowsNameList = getWindowsNameList(countWindows);
-        for (String winHandle : windowsNameList) {
+        String actualWindowName = driver.getWindowHandle();
+        for (String winHandle : driver.getWindowHandles()) {
             if (!actualWindowName.equals(winHandle)) {
-                changeToDesiredWindow(winHandle);
+                switchToWindow(winHandle);
             }
         }
-    }
-
-    public void moveToNextWindow() {
-        for (String winHandle : driver.getWindowHandles()) {
-            driver.switchTo().window(winHandle);
-        }
-    }
-
-    public void setOnFront() {
-        ((JavascriptExecutor) driver).executeScript("window.focus();");
-    }
-
-    protected void refresh() {
-        driver.navigate().refresh();
     }
 
     public void acceptAlert(long timeOutInSeconds) {
@@ -288,32 +111,6 @@ public class Utils extends SetupWebdriver {
             driver.switchTo().alert().accept();
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, String.format("alert not present for: '%s' --> continue", testCaseName));
-        }
-    }
-
-    public void removeAlertJS() {
-        //Metodo que modifica la funcion de creacion de una alerta para que no se produzcan
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript(
-                "window.alert = function(){return true}; ");
-    }
-
-    public void executeJavaScript(String funcion) {
-        espera();
-        if (driver instanceof JavascriptExecutor) {
-            ((JavascriptExecutor) driver)
-                    .executeScript(funcion);
-        }
-        espera();
-    }
-
-    public void cancelAlert() {
-        WebDriverWait wait = new WebDriverWait(this.driver, 5);
-        try {
-            wait.until(ExpectedConditions.alertIsPresent());
-            this.driver.switchTo().alert().dismiss();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, String.format("CancelAlert not present for: '%s'", testCaseName));
         }
     }
 
@@ -367,11 +164,11 @@ public class Utils extends SetupWebdriver {
         setAuxValue("CreationDate", todayDate, propertyFileName);
     }
 
+    //NEW STABILITY METHODS --> SERGIO CABALLERO
     public void waitForVisible(By element) {
         waitForVisible(element, 60);
     }
 
-    //NEW STABILITY METHODS --> SERGIO CABALLERO
     public void waitForClickable(By element) {
         waitForClickable(element, 60);
     }
@@ -533,24 +330,6 @@ public class Utils extends SetupWebdriver {
         }
     }
 
-    public void uploadLocalFile(WebElement inputFileElement, String filePath) {
-
-        //javascript to show the element
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].style.display = 'block';", inputFileElement);
-
-        //for headless browser
-        ((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
-        espera();
-
-        try {
-            inputFileElement.sendKeys(filePath);
-        } catch (NoSuchElementException e) {
-            LOGGER.log(Level.SEVERE, String.format("Exception thrown for: '%s'", testCaseName));
-            LOGGER.log(Level.WARNING, "Make sure the webElement passed is an input file type: " + testCaseName);
-        }
-    }
-
     public void executeSshCommand(String username, String password,
                                   String host, int port, String command) throws Exception {
 
@@ -652,7 +431,7 @@ public class Utils extends SetupWebdriver {
         //open downloads page
         jsExecutor.executeScript("window.open()");
         espera();
-        changeToNextWindow();
+        switchToNextWindow();
         driver.get("chrome://downloads");
 
         //getDownloadDetails
@@ -662,6 +441,7 @@ public class Utils extends SetupWebdriver {
         return new String[]{fileName, sourceURL};
     }
 
+    //ASSERTS
     @Step("{1}}")
     public void assertTrue(Boolean bol, String checkMessage) throws URISyntaxException, IOException, AssertionError {
         try {

@@ -1,11 +1,11 @@
 package browsers.standard;
 
-import browsers.BrowserCapability;
+import browsers.Browsers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 
-public class StandarEdge extends BrowserCapability implements Browser {
+public class StandarEdge extends Browsers {
     private static final EdgeOptions edgeOptions = new EdgeOptions();
 
     public StandarEdge() {

@@ -1,11 +1,11 @@
 package browsers.standard;
 
-import browsers.BrowserCapability;
+import browsers.Browsers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-public class StandarFirefox extends BrowserCapability implements Browser {
+public class StandarFirefox extends Browsers {
   private static final FirefoxOptions firefoxOptions = new FirefoxOptions();
 
   public StandarFirefox() {
