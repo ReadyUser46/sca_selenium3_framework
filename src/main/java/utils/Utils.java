@@ -18,8 +18,8 @@ import setup.SetupWebdriver;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -105,7 +105,7 @@ public class Utils extends SetupWebdriver {
     }
 
     public void acceptAlert(long timeOutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOutInSeconds));
         try {
             wait.until(ExpectedConditions.alertIsPresent());
             driver.switchTo().alert().accept();
@@ -199,9 +199,9 @@ public class Utils extends SetupWebdriver {
     }
 
     public boolean isElementLocated(By element, int timeoutInSeconds) { //locates an element
-        driver.manage().timeouts().implicitlyWait(timeoutInSeconds, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(timeoutInSeconds));
         boolean exists = !driver.findElements(element).isEmpty();
-        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
         return exists;
     }
 
@@ -223,7 +223,7 @@ public class Utils extends SetupWebdriver {
 
     public void waitForClickable(By element, int timeOutInSeconds) {
         //Clickable = located on DOM + visible + clickable
-        WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOutInSeconds));
         try {
             wait.until(ExpectedConditions.elementToBeClickable(element));
             espera(); //needed for angular
@@ -235,7 +235,7 @@ public class Utils extends SetupWebdriver {
 
     public void waitForVisible(By element, int timeOutInSeconds) {
         //Visible = located on DOM + visible
-        WebDriverWait image = new WebDriverWait(driver, timeOutInSeconds);
+        WebDriverWait image = new WebDriverWait(driver, Duration.ofSeconds(timeOutInSeconds));
         try {
             image.until(ExpectedConditions.visibilityOfElementLocated(element));
             espera(); //needed for angular
@@ -250,7 +250,7 @@ public class Utils extends SetupWebdriver {
     }
 
     public void waitForInvisible(By element, int timeOutInSeconds) {
-        WebDriverWait image = new WebDriverWait(driver, timeOutInSeconds);
+        WebDriverWait image = new WebDriverWait(driver, Duration.ofSeconds(timeOutInSeconds));
         image.until(ExpectedConditions.invisibilityOfElementLocated(element));
         espera(); //needed for angular
     }
@@ -260,7 +260,7 @@ public class Utils extends SetupWebdriver {
     }
 
     public void waitForNumberOfWindows(final int numberOfWindows, int timeOutSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeOutSeconds);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOutSeconds));
         ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
                 return (driver.getWindowHandles().size() == numberOfWindows);
@@ -271,7 +271,7 @@ public class Utils extends SetupWebdriver {
     }
 
     public void waitForJSandJqueryFinish(int timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         // wait for jQuery to load
         ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
             @Override
@@ -321,7 +321,7 @@ public class Utils extends SetupWebdriver {
 
     public void waitForLocated(By element) {
         //Located = located on DOM
-        WebDriverWait image = new WebDriverWait(driver, 60);
+        WebDriverWait image = new WebDriverWait(driver, Duration.ofSeconds(60));
         try {
             image.until(ExpectedConditions.presenceOfElementLocated(element));
         } catch (Exception e) {

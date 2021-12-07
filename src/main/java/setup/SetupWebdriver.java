@@ -10,17 +10,17 @@ import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import java.time.Duration;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SetupWebdriver {
 
     private static final String REMOTE_WEBDRIVER_URL = "http://localhost:4444/wd/hub";
-    private static final int pageTimeout = 300000; // The Timeout in miliseconds when a load page expectation is called
-    private static final int implicitTimeout = 20000; // The Timeout in miliseconds when an implicit expectation is called
-    private static final int scriptTimeout = 600000; // The script Timeout in miliseconds when a load script expectation is called
+    private static final int pageTimeout = 300; // The Timeout in seconds when a load page expectation is called
+    private static final int implicitTimeout = 20; // The Timeout in seconds when an implicit expectation is called
+    private static final int scriptTimeout = 600; // The script Timeout in seconds when a load script expectation is called
     protected WebDriver driver;
     private String testCaseName;
     private String browserName = null;
@@ -67,9 +67,9 @@ public class SetupWebdriver {
         driver = browser.getLocalDriver();
 
         /*manage timeouts*/
-        driver.manage().timeouts().implicitlyWait(implicitTimeout, TimeUnit.MILLISECONDS);
-        driver.manage().timeouts().pageLoadTimeout(pageTimeout, TimeUnit.MILLISECONDS);
-        driver.manage().timeouts().setScriptTimeout(scriptTimeout, TimeUnit.MILLISECONDS);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitTimeout));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(pageTimeout));
+        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(scriptTimeout));
 
         /*Logger*/
         setLogger(Logger.getLogger("setup"));
