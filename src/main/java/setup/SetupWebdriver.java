@@ -1,12 +1,10 @@
 package setup;
 
-
 import browsers.Browsers;
 import browsers.standard.StandarChrome;
 import browsers.standard.StandarEdge;
 import browsers.standard.StandarFirefox;
 import org.openqa.selenium.WebDriver;
-import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -18,18 +16,14 @@ import java.util.logging.Logger;
 public class SetupWebdriver {
 
     private static final String REMOTE_WEBDRIVER_URL = "http://localhost:4444/wd/hub";
-    private static final int pageTimeout = 300000; // The Timeout in miliseconds when a load page expectation is called
-    private static final int implicitTimeout = 20000; // The Timeout in miliseconds when an implicit expectation is called
-    private static final int scriptTimeout = 600000; // The script Timeout in miliseconds when a load script expectation is called
+    private static final int pageTimeout = 90; // The Timeout in seconds when a load page expectation is called
+    private static final int implicitTimeout = 40; // The Timeout in seconds when an implicit expectation is called
+    private static final int scriptTimeout = 600; // The script Timeout in seconds when a load script expectation is called
     protected WebDriver driver;
-    private String testCaseName;
+    protected String testCaseName;
     private String browserName = null;
     private String targetUrl = null;
     private Logger logger;
-
-    public String getTestCaseName() {
-        return testCaseName;
-    }
 
     public void setTestCaseName(String testCaseName) {
         this.testCaseName = testCaseName;
@@ -43,16 +37,12 @@ public class SetupWebdriver {
         this.targetUrl = targetUrl;
     }
 
-    public void setLogger(Logger logger) {
+    private void setLogger(Logger logger) {
         this.logger = logger;
     }
 
-    public Logger customLog() {
+    private Logger customLog() {
         return logger;
-    }
-
-    public void skipTest(String reason) {
-        throw new SkipException(reason);
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -67,9 +57,9 @@ public class SetupWebdriver {
         driver = browser.getLocalDriver();
 
         /*manage timeouts*/
-        driver.manage().timeouts().implicitlyWait(implicitTimeout, TimeUnit.MILLISECONDS);
-        driver.manage().timeouts().pageLoadTimeout(pageTimeout, TimeUnit.MILLISECONDS);
-        driver.manage().timeouts().setScriptTimeout(scriptTimeout, TimeUnit.MILLISECONDS);
+        driver.manage().timeouts().implicitlyWait(implicitTimeout, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(pageTimeout, TimeUnit.SECONDS);
+        driver.manage().timeouts().setScriptTimeout(scriptTimeout, TimeUnit.SECONDS);
 
         /*Logger*/
         setLogger(Logger.getLogger("setup"));

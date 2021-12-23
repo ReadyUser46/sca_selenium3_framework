@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.SkipException;
 import setup.SetupWebdriver;
 
 import java.io.*;
@@ -31,11 +32,9 @@ public class Utils extends SetupWebdriver {
      */
 
     protected static final Logger LOGGER = Logger.getLogger(Utils.class.getName());
-    private final String testCaseName;
     private SetupWebdriver setupWebdriver;
 
     public Utils() {
-        testCaseName = getTestCaseName();
     }
 
     /**
@@ -460,5 +459,10 @@ public class Utils extends SetupWebdriver {
             throw new AssertionError(e.getMessage());
         }
     }
+
+    protected void skipTest(String reason) {
+        throw new SkipException(reason);
+    }
+
 
 }
